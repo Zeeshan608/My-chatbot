@@ -28,7 +28,28 @@ except Exception:
 client = genai.Client(api_key=api_key)
 
 # ---------- Config ----------
-MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.5-flash-lite"]  # check AI Studio for latest
+FALLBACK_MODELS = ["gemini-3-flash-preview", "gemini-3.1-pro-preview"]
+SKIP = ("tts", "image", "live", "audio", "embedding", "transcribe", "translate",
+        "omni", "robotics", "lyria", "veo", "imagen", "aqa", "learnlm", "gemma")
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_models(_client):
+    """Ask Google which chat models this API key can use right now."""
+    try:
+        names = []
+        for m in _client.models.list():
+            actions = getattr(m, "supported_actions", None) or []
+            name = (m.name or "").replace("models/", "")
+            if "generateContent" in actions and name.startswith("gemini") \
+                    and not any(k in name for k in SKIP):
+                names.append(name)
+        return sorted(set(names), reverse=True) or FALLBACK_MODELS
+    except Exception:
+        return FALLBACK_MODELS
+
+
+MODELS = get_models(client)
 PERSONAS = {
     "General Assistant": "You are a helpful, friendly and concise assistant.",
     "Professional Writer": "You are an expert writer. Produce polished, well-structured text.",
