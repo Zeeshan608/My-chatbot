@@ -136,9 +136,9 @@ if prompt:
                         full += chunk.text
                         placeholder.markdown(full + "▌")
             placeholder.markdown(full)
-               except Exception as e:
+        except Exception as e:
             placeholder.error(f"Error: {e}")
-            st.session_state.messages.pop()  # remove the unanswered question
+            st.session_state.messages.pop()
             st.stop()
 
     st.session_state.messages.append({"role": "assistant", "content": full})
