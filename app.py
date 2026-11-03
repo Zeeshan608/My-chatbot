@@ -44,7 +44,9 @@ def get_models(_client):
             if "generateContent" in actions and name.startswith("gemini") \
                     and not any(k in name for k in SKIP):
                 names.append(name)
-        return sorted(set(names), reverse=True) or FALLBACK_MODELS
+        names = sorted(set(names), reverse=True)
+        names.sort(key=lambda n: "pro" in n)  # Flash models first, Pro last
+        return names or FALLBACK_MODELS
     except Exception:
         return FALLBACK_MODELS
 
