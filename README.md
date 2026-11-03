@@ -11,8 +11,6 @@
 
 **[👉 Try Nova AI Live](https://my-chatbot-804.streamlit.app/)**
 
-![Nova AI Screenshot](screenshot.png)
-
 </div>
 
 ---
@@ -90,7 +88,6 @@ My-chatbot/
 ├── app.py                 # Main application logic
 ├── style.css              # Custom UI design
 ├── requirements.txt       # Python dependencies
-├── screenshot.png         # App preview used in this README
 └── README.md              # You are here
 ```
 
